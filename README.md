@@ -27,7 +27,7 @@ ImageFinder.fetch "sample.txt.gz", "out"
 
 ## El ejercicio
 
-Este proyecto funciona, pero tiene algunos problemas notables: 
+Este proyecto funciona, pero tiene algunos problemas notables:
 
 * El modulo `ImageFinder` es totalmente bloqueante: no liberará el control hasta que haya terminado de descargar todas las imágenes. Lo que es más grave, no se pueden extraer links de más de un archivo al mismo tiempo. 
 * El throughput es muy limitado, dado que procesa las imágenes de a una por vez, y no empieza hasta haber terminado de leer todo el archivo
@@ -37,7 +37,13 @@ Este proyecto funciona, pero tiene algunos problemas notables:
   
 ### Primera parte
   
-El primer objetivo es mejorar el diseño del módulo `ImageFinder`, separando convenintemente las tareas en diferentes actores, y diseñando una jerarquía de supervisión adecuada. 
+El primer objetivo es mejorar el diseño del módulo `ImageFinder`, separando convenintemente las tareas en diferentes actores, y diseñando una jerarquía de supervisión adecuada.
+
+Recomendamos ir solucionando los problemas mencionados anteriormente de a uno. Por ejemplo:
+* ir descargando links a medida que se leen del archivo (en vez de esperar a que se termine de leer completamente)
+* descargar más de una imagen en simultaneo (se pueden ir descargando sin límite a medida que se obtienen los links, o tener cierta cantidad fija de descargas "en paralelo")
+* asegurarse de que el error en una descarga no haga fallar todo el proceso
+* poder invocar a nuestro módulo varias veces con varios archivos distintos, aún cuando el proceso anterior no se haya terminado de ejecutar
 
 ### Segunda parte
 

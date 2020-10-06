@@ -14,6 +14,12 @@ Que pasa si recibo un error como el siguiente?
 
 Vamos a tener que ejecutar el siguiente comando -> `mix local.hex` y despues ejecutar el primer comando.
 
+## Como pruebo los cambios desde iex??
+
+Cargando las dependencias y el modulo mediante mix, ejecutando el siguiente comando:
+
+`iex -S mix`
+
 ## Introducción
 
 Este repositorio contiene el código de una aplicación `elixir/otp`, que permite extraer de un archivo de texto plano links a imágenes (en formato `png`, `jpg` o `gif`), y descargarlas en un directorio. 
@@ -21,7 +27,7 @@ Este repositorio contiene el código de una aplicación `elixir/otp`, que permit
 Para ello, se expone un módulo `ImageFinder` y una función `fetch`, que toma la ruta del archivo de links y el directorio en el cual se descargarán. Ambas rutas pueden ser relativas al proyecto o absolutas. Por ejemplo: 
 
 ```elixir
-ImageFinder.fetch "sample.txt.gz", "out"
+ImageFinder.fetch "sample.txt", "out"
 :ok
 ```
 

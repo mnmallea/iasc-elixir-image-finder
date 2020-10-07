@@ -31,6 +31,10 @@ ImageFinder.fetch "sample.txt", "out"
 :ok
 ```
 
+## Corriendo con docker compose
+Para correr la consola con docker-compose se puede utilizar el comando `docker-compose run console`.
+Si se agrega una dependencia va a ser necesario correr `docker-compose build` para actualizarlas.
+
 ## El ejercicio
 
 Este proyecto funciona, pero tiene algunos problemas notables:

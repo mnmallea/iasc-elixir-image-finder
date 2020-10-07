@@ -1,12 +1,16 @@
-version: '2'
+version: '3'
 services:
   console:
     build: .
     volumes:
       - .:/var/app
+      - ~/.Xauthority:/root/.Xauthority
       - deps:/var/app/deps
       - _build:/var/app/_build
     command: iex -S mix
+    environment:
+      - "DISPLAY=${DISPLAY}"
+    network_mode: host
 volumes:
   deps:
   _build:

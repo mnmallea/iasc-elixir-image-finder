@@ -1,0 +1,7 @@
+version: '2'
+services:
+  console:
+    build: .
+    volumes:
+      - .:/app
+    command: iex -S mix

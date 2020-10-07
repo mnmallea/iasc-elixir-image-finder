@@ -5,6 +5,8 @@ services:
     volumes:
       - .:/var/app
       - deps:/var/app/deps
+      - _build:/var/app/_build
     command: iex -S mix
 volumes:
   deps:
+  _build:

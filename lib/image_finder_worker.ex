@@ -1,5 +1,5 @@
 defmodule ImageFinder.Worker do
-  use GenServer
+  use GenServer, restart: :transient
 
   def start_link(name) do
     GenServer.start_link(__MODULE__, :ok, name: name)
@@ -18,15 +18,7 @@ defmodule ImageFinder.Worker do
     {:reply, :ok, state}
   end
 
-  def fetch_link(link, target_directory) do
-    HTTPotion.get(link).body  |> save(target_directory)
-  end
-
-  def digest(body) do
-    :crypto.hash(:md5 , body) |> Base.encode16()
-  end
-
-  def save(body, directory) do
-    File.write! "#{directory}/#{digest(body)}", body
+  def fetch_link(url, out_path) do
+    ImageFinder.DownloaderSupervisor.start_finder(url, out_path)
   end
 end

@@ -1,21 +1,18 @@
 defmodule ImageFinder.ImageDownloader do
-  use GenServer
+  use GenServer, restart: :transient
 
   def start_link(state) do
-    IO.puts('Start link')
     { :ok, pid } = GenServer.start_link(__MODULE__, state)
     GenServer.cast(pid, {:perform})
   end
   
   @impl true
   def init({url, out_path}) do
-    IO.puts('init')
     {:ok, {url, out_path}}    
   end
 
   @impl true
   def handle_cast({:perform}, { url, out_path }) do
-    Process.sleep(3000)
     fetch_link(url, out_path)
     {:stop, :normal, {}}
   end

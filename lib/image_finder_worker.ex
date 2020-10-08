@@ -1,5 +1,5 @@
 defmodule ImageFinder.Worker do
-  use GenServer, restart: :transient
+  use GenServer
 
   def start_link(name) do
     GenServer.start_link(__MODULE__, :ok, name: name)

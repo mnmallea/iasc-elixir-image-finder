@@ -12,6 +12,6 @@ defmodule ImageFinder.DownloaderSupervisor do
   end
 
   def start_finder(url, out_path) do
-    DynamicSupervisor.start_child(__MODULE__, ImageFinder.ImageDownloader.child_spec({ url, out_path }))
+    DynamicSupervisor.start_child(__MODULE__, {ImageFinder.ImageDownloader, {url, out_path}})
   end
 end

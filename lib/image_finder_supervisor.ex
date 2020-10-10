@@ -5,12 +5,13 @@ defmodule ImageFinder.Supervisor do
     Supervisor.start_link(__MODULE__, :ok)
   end
 
-  def init(:ok) do
+  @impl true
+  def init(_init_arg) do
     children = [
-      worker(ImageFinder.Worker, [ImageFinder.Worker]),
-      worker(ImageFinder.DownloaderSupervisor, [ImageFinder.DownloaderSupervisor])
+      ImageFinder.Worker,
+      ImageFinder.DownloaderSupervisor
     ]
 
-    supervise(children, strategy: :one_for_one)
+    Supervisor.init(children, strategy: :one_for_one)
   end
 end

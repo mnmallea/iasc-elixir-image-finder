@@ -1,3 +1,2 @@
 https://mumuki.io/logo-alt.png
-http://localhost:3001/elasticsearch.png
 https://mumuki.io/home/images/bajada/mumuki-aula.jpg

@@ -23,6 +23,7 @@ defmodule ImageFinder.Worker do
   end
 
   defp fetch_link(url, out_path) do
+    IO.puts "Link encontrado #{url}"
     ImageFinder.DownloaderSupervisor.start_finder(url, out_path)
   end
 end

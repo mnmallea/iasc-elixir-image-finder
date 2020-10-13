@@ -1,31 +1,39 @@
 defmodule ImageFinder.ImageDownloader do
-  use Task, restart: :transient
+  use GenServer, restart: :transient
 
   def start_link(init_arg) do
     IO.puts("Iniciando task desde #{inspect(self())}")
-    Task.start_link(__MODULE__, :run, [init_arg])
+    GenServer.start_link(__MODULE__, init_arg)
   end
 
-  def run({url, out_path}) do
-    IO.puts("Iniciando task #{url} #{inspect(self())}")
-    fetch_link(url, out_path)
-    IO.puts("Finalizando task #{url} #{inspect(self())}")
+  @impl true
+  def init({ url, out_path }) do
+    GenServer.cast(self(), :fetch_link)
+    {:ok, { url, out_path, 1 }}
   end
 
-  defp fetch_link(link, target_directory) do
-    import HTTPotion, only: [get: 1]
-    case get(link) do
-      %{ body: body } -> save(body, target_directory)
-      _ -> raise "Error en la request: #{inspect(self())}"
+  @impl true
+  def handle_cast(:fetch_link, { url, out_path, retry_count }) do
+    case HTTPotion.get(url) do
+      %HTTPotion.Response{ status_code: 200, body: body } -> 
+        IO.puts "Request completada"
+        save(body, out_path)
+        { :stop, :normal, {} }
+      _ ->
+        if retry_count > 3 do
+          IO.puts "Error en la request. Fin del woker"
+          { :stop, :normal, {} }
+        else
+          IO.puts "Error en la request. Intento #{retry_count}"
+          Process.sleep(retry_count * 1_000)
+          GenServer.cast(self(), :fetch_link)
+          { :noreply, { url, out_path, retry_count + 1 } }
+        end
     end
-  end
-
-  defp digest(body) do
-    :crypto.hash(:md5, body) |> Base.encode16()
   end
 
   defp save(body, directory) do
     IO.puts 'Imagen descargada'
-    File.write!("#{directory}/#{digest(body)}", body)
+    File.write!("#{directory}/#{UUID.uuid4}", body)
   end
 end

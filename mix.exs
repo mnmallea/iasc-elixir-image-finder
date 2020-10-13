@@ -29,6 +29,6 @@ defmodule ImageFinder.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:httpotion, "~> 3.0.2"}]
+    [{:httpotion, "~> 3.0.2"}, { :uuid, "~> 1.1" }]
   end
 end

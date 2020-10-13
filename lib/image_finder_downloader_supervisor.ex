@@ -8,7 +8,7 @@ defmodule ImageFinder.DownloaderSupervisor do
 
   @impl true
   def init(_init_arg) do
-    DynamicSupervisor.init(strategy: :one_for_one, max_restarts: 1)
+    DynamicSupervisor.init(strategy: :one_for_one, max_restarts: 3)
   end
 
   def start_finder(url, out_path) do

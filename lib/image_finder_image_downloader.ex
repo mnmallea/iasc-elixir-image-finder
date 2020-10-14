@@ -19,16 +19,17 @@ defmodule ImageFinder.ImageDownloader do
         IO.puts "Request completada"
         save(body, out_path)
         { :stop, :normal, {} }
+      %HTTPotion.Response{ status_code: 404 } ->
+        IO.puts "Imagen no encontrada"
+        { :stop, :normal, {} }
+      _ when retry_count > 3 ->
+        IO.puts "Error en la request. Fin del woker"
+        { :stop, :normal, {} }
       _ ->
-        if retry_count > 3 do
-          IO.puts "Error en la request. Fin del woker"
-          { :stop, :normal, {} }
-        else
-          IO.puts "Error en la request. Intento #{retry_count}"
-          Process.sleep(retry_count * 1_000)
-          GenServer.cast(self(), :fetch_link)
-          { :noreply, { url, out_path, retry_count + 1 } }
-        end
+        IO.puts "Error en la request. Intento #{retry_count}"
+        Process.sleep(retry_count * 1_000)
+        GenServer.cast(self(), :fetch_link)
+        { :noreply, { url, out_path, retry_count + 1 } }
     end
   end
 
